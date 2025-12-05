@@ -1,10 +1,12 @@
 import matter from 'gray-matter';
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import BlogPost from '../components/BlogPost';
 
 const PostPage = () => {
-    const { slug } = useParams();
+    const location = useLocation();
+    const slug = location.pathname.replace('/post/', '');
+
     const navigate = useNavigate();
     const [post, setPost] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -17,6 +19,7 @@ const PostPage = () => {
             try {
                 // Load all posts and find the one matching the slug
                 const postModules = import.meta.glob('../content/posts/**/*.md', { query: '?raw', import: 'default' });
+                console.log(slug);
 
                 // Find the post that matches the slug
                 let content = null;
@@ -26,6 +29,7 @@ const PostPage = () => {
                         .replace('../content/posts/', '')
                         .replace('.md', '')
                         .replaceAll(' ', '-');
+                    console.log(postSlug);
 
                     if (postSlug === slug) {
                         content = await postModules[path]();

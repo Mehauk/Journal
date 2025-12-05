@@ -150,7 +150,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
-      <Route path="/post/:slug" element={<PostPage />} />
+      <Route path="/post/:slug/*" element={<PostPage />} />
     </Routes>
   );
 }

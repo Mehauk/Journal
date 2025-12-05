@@ -1,7 +1,7 @@
 ---
 title: Building libmecab.so for Android
 date: 2025-11-29
-tags: [android, native, mecab]
+tags: [shared library, android, native, mecab]
 excerpt: Compiling the libmecab.so for use in Android (aarch64-linux-android)
 readTime: 7 min read
 ---

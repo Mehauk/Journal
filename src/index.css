@@ -123,6 +123,14 @@ body {
   line-height: 1.75;
 }
 
+.markdown-content pre {
+  padding: 0.7rem;
+  margin: 1rem 0;
+  border-radius: 0.25rem;
+  color: var(--color-accent-cyan);
+  background-color: var(--color-dark-lighter);
+}
+
 .markdown-content code {
   background-color: var(--color-dark-lighter);
   padding: 0.125rem 0.5rem;
@@ -163,7 +171,7 @@ body {
 .markdown-content h4 a,
 .markdown-content h5 a,
 .markdown-content h6 a {
-  color: inherit;
+  color: white;
   text-decoration: none;
   position: relative;
 }
