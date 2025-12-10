@@ -19,7 +19,6 @@ const PostPage = () => {
             try {
                 // Load all posts and find the one matching the slug
                 const postModules = import.meta.glob('../content/posts/**/*.md', { query: '?raw', import: 'default' });
-                console.log(slug);
 
                 // Find the post that matches the slug
                 let content = null;
@@ -29,9 +28,8 @@ const PostPage = () => {
                         .replace('../content/posts/', '')
                         .replace('.md', '')
                         .replaceAll(' ', '-');
-                    console.log(postSlug);
 
-                    if (postSlug === slug) {
+                    if (postSlug.toLowerCase() === slug.toLowerCase()) {
                         content = await postModules[path]();
                         break;
                     }

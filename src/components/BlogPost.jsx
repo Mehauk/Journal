@@ -68,7 +68,7 @@ const BlogPost = ({ post, onClose }) => {
                             remarkGfm,
                             [remarkWikiLink, {
                                 pageResolver: (name) => [name.replace(/ /g, '-').toLowerCase()],
-                                hrefTemplate: (permalink) => `/post/${permalink}`,
+                                hrefTemplate: (permalink) => permalink,
                                 aliasDivider: '|',
                             }]
                         ]}
@@ -79,6 +79,7 @@ const BlogPost = ({ post, onClose }) => {
                         ]}
                         components={{
                             a: ({ node, href, children, ...props }) => {
+                                console.log(href);
                                 // Handle same-page heading links
                                 if (href && href.includes('/post/#')) {
                                     href = href.replace('/post/', '');

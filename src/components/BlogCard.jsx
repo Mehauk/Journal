@@ -16,7 +16,7 @@ const BlogCard = ({ post }) => {
 
     return (
         <Link to={`/post/${post.slug}`}>
-            <article className="glass glass-hover rounded-2xl p-6 cursor-pointer transform transition-all hover:scale-105 fade-in-up">
+            <article className="glass glass-hover rounded-2xl p-6 cursor-pointer transform transition-all hover:scale-105 fade-in-up flex flex-col h-full">
                 <div className="flex items-center gap-2 text-sm text-gray-400 mb-3">
                     <time>{formatDate(post.date)}</time>
                     <span>•</span>
@@ -30,6 +30,7 @@ const BlogCard = ({ post }) => {
                 <p className="text-gray-300 mb-4 line-clamp-3">
                     {post.excerpt}
                 </p>
+                <div className="mt-auto"></div>
 
                 <div className="flex flex-wrap gap-2">
                     {post.tags && post.tags.map((tag, index) => (
