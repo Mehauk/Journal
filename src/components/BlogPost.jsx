@@ -28,16 +28,28 @@ const BlogPost = ({ post, onClose }) => {
     return (
         <div className="min-h-screen bg-dark">
             <div className="max-w-4xl mx-auto px-6 py-12">
-                {/* Back button */}
-                <button
-                    onClick={onClose}
-                    className="mb-8 flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
-                >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                    </svg>
-                    Back to posts
-                </button>
+                {/* Breadcrumbs */}
+                <nav className="mb-8 flex flex-wrap items-center gap-2 text-sm text-gray-400">
+                    {post.breadcrumbs && post.breadcrumbs.map((item, index) => (
+                        <div key={index} className="flex items-center gap-2">
+                            {index > 0 && <span className="text-gray-600">/</span>}
+                            {item.path ? (
+                                <a
+                                    href={item.path}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        navigate(item.path);
+                                    }}
+                                    className="hover:text-accent-purple transition-colors"
+                                >
+                                    {item.label}
+                                </a>
+                            ) : (
+                                <span className="text-white font-medium">{item.label}</span>
+                            )}
+                        </div>
+                    ))}
+                </nav>
 
                 {/* Post header */}
                 <div className="mb-8">
@@ -143,8 +155,37 @@ const BlogPost = ({ post, onClose }) => {
                         {post.content}
                     </ReactMarkdown>
                 </div>
+
+                {/* Sub-articles section */}
+                {post.subArticles && post.subArticles.length > 0 && (
+                    <div className="mt-16 pt-8 border-t border-gray-800">
+                        <h2 className="text-2xl font-bold mb-6 gradient-text">Sub-articles</h2>
+                        <div className="grid gap-4">
+                            {post.subArticles.map((subArticle, index) => (
+                                <a
+                                    key={index}
+                                    href={`/post/${subArticle.slug}`}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        navigate(`/post/${subArticle.slug}`);
+                                    }}
+                                    className="block p-4 rounded-xl glass hover:bg-white/5 transition-all group"
+                                >
+                                    <h3 className="text-xl font-semibold mb-2 group-hover:text-accent-purple transition-colors">
+                                        {subArticle.title}
+                                    </h3>
+                                    {subArticle.date && (
+                                        <p className="text-sm text-gray-500">
+                                            {formatDate(subArticle.date)}
+                                        </p>
+                                    )}
+                                </a>
+                            ))}
+                        </div>
+                    </div>
+                )}
             </div>
-        </div >
+        </div>
     );
 };
 

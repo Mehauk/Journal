@@ -19,8 +19,12 @@ function HomePage() {
 
       for (const path in postModules) {
         const content = await postModules[path]();
-        const post = parseMarkdown(content, path);
-        loadedPosts.push(post);
+        const post = parseMarkdown(content, path); // slug is generated here
+
+        // Only include top-level posts (no slashes in slug)
+        if (!post.slug.includes('/')) {
+          loadedPosts.push(post);
+        }
       }
 
       // Sort by date (newest first)

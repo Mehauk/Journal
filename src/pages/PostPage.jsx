@@ -17,11 +17,13 @@ const PostPage = () => {
 
         const loadPost = async () => {
             try {
-                // Load all posts and find the one matching the slug
+                // Load all posts
                 const postModules = import.meta.glob('../content/posts/**/*.md', { query: '?raw', import: 'default' });
 
-                // Find the post that matches the slug
-                let content = null;
+                let foundContent = null;
+                const subArticlesList = [];
+                const ancestors = [];
+
                 for (const path in postModules) {
                     // Extract slug from path
                     const postSlug = path
@@ -29,18 +31,51 @@ const PostPage = () => {
                         .replace('.md', '')
                         .replaceAll(' ', '-');
 
+                    // Check if this is the main post
                     if (postSlug.toLowerCase() === slug.toLowerCase()) {
-                        content = await postModules[path]();
-                        break;
+                        foundContent = await postModules[path]();
+                    }
+
+                    // Check if this is an ancestor
+                    if (slug.toLowerCase().startsWith(postSlug.toLowerCase() + '/')) {
+                        const content = await postModules[path]();
+                        const { data } = matter(content);
+                        ancestors.push({
+                            title: data.title || 'Untitled',
+                            slug: postSlug
+                        });
+                    }
+
+                    // Check if this is a sub-article (direct child)
+                    // e.g. slug="A", postSlug="A/B" -> startsWith("A/") and no other slashes
+                    if (postSlug.toLowerCase().startsWith(slug.toLowerCase() + '/') &&
+                        !postSlug.slice(slug.length + 1).includes('/')) {
+
+                        const content = await postModules[path]();
+                        const { data } = matter(content);
+                        subArticlesList.push({
+                            title: data.title || 'Untitled',
+                            slug: postSlug,
+                            date: data.date
+                        });
                     }
                 }
 
-                if (!content) {
+                if (!foundContent) {
                     throw new Error('Post not found');
                 }
 
-                // Parse the markdown
-                const { data, content: markdownContent } = matter(content);
+                // Sort ancestors by slug length to ensure correct hierarchy order
+                ancestors.sort((a, b) => a.slug.length - b.slug.length);
+
+                // Parse the main post
+                const { data, content: markdownContent } = matter(foundContent);
+
+                const breadcrumbs = [
+                    { label: 'Home', path: '/' },
+                    ...ancestors.map(a => ({ label: a.title, path: `/post/${a.slug}` })),
+                    { label: data.title || 'Untitled', path: null }
+                ];
 
                 setPost({
                     title: data.title || 'Untitled',
@@ -49,7 +84,9 @@ const PostPage = () => {
                     excerpt: data.excerpt || '',
                     readTime: data.readTime || '5 min read',
                     content: markdownContent,
-                    slug: slug
+                    slug: slug,
+                    subArticles: subArticlesList,
+                    breadcrumbs: breadcrumbs
                 });
                 setLoading(false);
             } catch (error) {
