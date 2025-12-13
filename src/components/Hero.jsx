@@ -3,6 +3,7 @@ const Hero = () => {
     const githubAvatar = import.meta.env.VITE_GITHUB_AVATAR_URL;
     const githubProfile = import.meta.env.VITE_GITHUB_PROFILE_URL;
     const githubName = import.meta.env.VITE_GitHUB_NAME;
+    const githubUsername = import.meta.env.VITE_GITHUB_USERNAME;
 
     return (
         <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -39,7 +40,7 @@ const Hero = () => {
                     <span className="gradient-text">Technical Journal</span>
                 </h1>
                 <p className="text-xl md:text-2xl text-gray-300 mb-8 fade-in-up" style={{ animationDelay: '0.2s' }}>
-                    A place where I document my technical adventures
+                    A place where I document my adventures
                 </p>
                 <div className="flex gap-4 justify-center fade-in-up" style={{ animationDelay: '0.4s' }}>
                     <a
