@@ -199,7 +199,7 @@ const PostPage = () => {
         );
     }
 
-    return <BlogPost post={post} onClose={() => navigate('/')} />;
+    return <BlogPost post={post} />;
 };
 
 export default PostPage;

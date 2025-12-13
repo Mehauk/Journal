@@ -10,7 +10,7 @@ import SideNav from './SideNav';
 
 import { useNavigate } from 'react-router-dom';
 
-const BlogPost = ({ post, onClose }) => {
+const BlogPost = ({ post }) => {
     const navigate = useNavigate();
 
     const formatDate = (dateString) => {
