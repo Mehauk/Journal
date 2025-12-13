@@ -3,7 +3,7 @@ title: Compiling MeCab for use in Android
 date: 2025-11-28
 tags: [android, native, mecab]
 excerpt: Building the required shared libraries to be used in andoird development
-readTime: 1 min read
+readTime: 20 min read
 ---
 
 # Compiling MeCab for use in Android
