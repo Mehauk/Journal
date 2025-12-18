@@ -1,2 +1,3 @@
 - add language support to code blocks
-- move TOC to right side and simply left nav
+- bugfix left nav, auto highlight selected as well as auto open dirs
+- finish mecab posts

@@ -1,10 +1,20 @@
 import matter from 'gray-matter';
 import { useEffect, useState } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import BlogCard from './components/BlogCard';
 import Hero from './components/Hero';
 import './index.css';
 import PostPage from './pages/PostPage';
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
 
 function HomePage() {
   const [posts, setPosts] = useState([]);
@@ -150,12 +160,25 @@ function HomePage() {
   );
 }
 
+import Footer from './components/Footer';
+
 function App() {
+  const location = useLocation();
+
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/post/:slug/*" element={<PostPage />} />
-    </Routes>
+    <div className="flex flex-col min-h-screen">
+      <ScrollToTop />
+      <div
+        key={location.pathname}
+        className="flex-1 page-transition"
+      >
+        <Routes location={location}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/post/:slug/*" element={<PostPage />} />
+        </Routes>
+      </div>
+      <Footer />
+    </div>
   );
 }
 

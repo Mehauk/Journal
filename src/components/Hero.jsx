@@ -1,9 +1,6 @@
+import { github } from "../config/socials";
 
 const Hero = () => {
-    const githubAvatar = import.meta.env.VITE_GITHUB_AVATAR_URL;
-    const githubProfile = import.meta.env.VITE_GITHUB_PROFILE_URL;
-    const githubName = import.meta.env.VITE_GitHUB_NAME;
-    const githubUsername = import.meta.env.VITE_GITHUB_USERNAME;
 
     return (
         <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -15,23 +12,23 @@ const Hero = () => {
 
             {/* Content */}
             <div className="relative z-10 text-center px-6 max-w-5xl mx-auto">
-                {githubAvatar && (
+                {github.avatar && (
                     <div className="mb-8 fade-in-up">
                         <a
-                            href={githubProfile}
+                            href={github.profile}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="inline-block"
                         >
                             <img
-                                src={githubAvatar}
-                                alt={githubName}
+                                src={github.avatar}
+                                alt={github.name}
                                 className="w-32 h-32 rounded-full border-4 border-white/10 shadow-2xl hover:scale-105 transition-transform duration-300"
                             />
                         </a>
-                        {githubName && (
+                        {github.name && (
                             <p className="mt-4 text-xl text-gray-300 font-medium">
-                                Hi, I'm {githubName}
+                                Hi, I'm {github.name}
                             </p>
                         )}
                     </div>

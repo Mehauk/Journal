@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const SideNav = ({ fileTree, headings, currentSlug }) => {
+const SideNav = ({ fileTree, currentSlug, isOpen, onClose }) => {
     const navigate = useNavigate();
     const [expandedPaths, setExpandedPaths] = useState(new Set());
 
@@ -10,7 +10,6 @@ const SideNav = ({ fileTree, headings, currentSlug }) => {
         if (currentSlug) {
             const pathsToExpand = new Set(expandedPaths);
 
-            // Helper to find path of current slug in tree
             const findPathForSlug = (nodes, targetSlug, parents = []) => {
                 for (const node of nodes) {
                     if (node.slug === targetSlug) {
@@ -27,9 +26,6 @@ const SideNav = ({ fileTree, headings, currentSlug }) => {
             const parents = findPathForSlug(fileTree, currentSlug);
             if (parents) {
                 parents.forEach(p => pathsToExpand.add(p));
-                // Also expand the current node itself if it has children (it's a folder/article)
-                // We'd need to know if the current slug maps to a node with children.
-                // Re-traverse or just check:
                 const findNode = (nodes, targetSlug) => {
                     for (const node of nodes) {
                         if (node.slug === targetSlug) return node;
@@ -69,7 +65,6 @@ const SideNav = ({ fileTree, headings, currentSlug }) => {
         const hasChildren = node.children && node.children.length > 0;
         const isExpanded = expandedPaths.has(node.path);
 
-        // Indentation via margin
         const marginLeft = `${depth * 12}px`;
 
         return (
@@ -81,7 +76,6 @@ const SideNav = ({ fileTree, headings, currentSlug }) => {
                         }`}
                     style={{ marginLeft }}
                 >
-                    {/* Chevron Toggle */}
                     <button
                         onClick={(e) => hasChildren ? toggleExpand(node.path, e) : null}
                         className={`p-0.5 mr-1 rounded hover:bg-white/10 ${!hasChildren ? 'opacity-0 pointer-events-none' : ''}`}
@@ -96,10 +90,12 @@ const SideNav = ({ fileTree, headings, currentSlug }) => {
                         </svg>
                     </button>
 
-                    {/* Label / Link */}
                     {node.slug ? (
                         <button
-                            onClick={() => navigate(`/post/${node.slug}`)}
+                            onClick={() => {
+                                navigate(`/post/${node.slug}`);
+                                if (onClose) onClose();
+                            }}
                             className="flex-1 text-left text-sm truncate"
                         >
                             {node.title || node.name}
@@ -111,51 +107,9 @@ const SideNav = ({ fileTree, headings, currentSlug }) => {
                     )}
                 </div>
 
-                {/* Children / Headings Container */}
-                {/* 
-                   Logic: 
-                   - If has children: Show children ONLY if expanded.
-                   - If isCurrent: Show headings ALWAYS (part of "selected article content").
-                   - Headings should appear *before* children? Or *after*? 
-                     Usually nested files are "inside" the folder. 
-                     The article content (headings) is "inside" the file.
-                     If a node is BOTH file and folder:
-                       - It displays its headings (content structure).
-                       - Then it displays its nested files (sub-structure).
-                */}
-
-                {(isExpanded || (isCurrent && headings && headings.length > 0)) && (
+                {hasChildren && isExpanded && (
                     <div className="border-l border-gray-800 ml-[15px]">
-                        {/* 1. Headings (Only if this is the current active article) */}
-                        {isCurrent && headings && headings.length > 0 && (
-                            <div className="p-1 ">
-                                {headings.map((heading, index) => (
-                                    <a
-                                        key={index}
-                                        href={`#${heading.id}`}
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            const element = document.getElementById(heading.id);
-                                            if (element) {
-                                                element.scrollIntoView({ behavior: 'smooth' });
-                                                window.history.pushState(null, '', `#${heading.id}`);
-                                            }
-                                        }}
-                                        className="block py-1 px-3 text-xs text-gray-500 hover:text-accent-cyan transition-colors truncate border-l-2 border-transparent hover:border-gray-700"
-                                        style={{ paddingLeft: `${12 + (heading.level - 2) * 8}px` }}
-                                    >
-                                        {heading.text}
-                                    </a>
-                                ))}
-                            </div>
-                        )}
-
-                        {/* 2. Children (Only if expanded) */}
-                        {hasChildren && isExpanded && (
-                            <div>
-                                {node.children.map(child => renderTree(child, 0))}
-                            </div>
-                        )}
+                        {node.children.map(child => renderTree(child, depth + 1))}
                     </div>
                 )}
             </div>
@@ -163,14 +117,37 @@ const SideNav = ({ fileTree, headings, currentSlug }) => {
     };
 
     return (
-        <aside className="h-screen sticky top-0 overflow-y-auto py-8 px-4 border-r border-gray-800 custom-scrollbar">
-            <div className="mb-8">
-                <h3 className="text-sm font-bold text-gray-400 mb-4 px-2">EXPLORER</h3>
-                <div className="space-y-1">
-                    {fileTree.map(node => renderTree(node))}
+        <>
+            {/* Mobile Backdrop */}
+            {isOpen && (
+                <div
+                    className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
+                    onClick={onClose}
+                />
+            )}
+
+            <aside className={`
+                fixed inset-y-0 left-0 z-50 w-72 bg-dark border-r border-gray-800 transform transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 lg:z-0
+                ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+            `}>
+                <div className="h-full flex flex-col py-8 px-4 overflow-y-auto custom-scrollbar">
+                    <div className="mb-8 flex items-center justify-between">
+                        <h3 className="text-sm font-bold text-gray-400 px-2 tracking-widest">EXPLORER</h3>
+                        <button
+                            onClick={onClose}
+                            className="p-2 text-gray-400 hover:text-white lg:hidden"
+                        >
+                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div className="space-y-1">
+                        {fileTree.map(node => renderTree(node))}
+                    </div>
                 </div>
-            </div>
-        </aside>
+            </aside>
+        </>
     );
 };
 
