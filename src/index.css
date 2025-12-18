@@ -142,6 +142,35 @@ body {
 .markdown-content pre code {
   background-color: transparent;
   padding: 0;
+  counter-reset: line;
+  display: block;
+}
+
+.markdown-content pre code .line-wrapper {
+  display: block;
+  counter-increment: line;
+  position: relative;
+  padding-left: 2rem;
+  min-height: 1.5rem;
+}
+
+.markdown-content pre code .line-wrapper::before {
+  content: counter(line);
+  position: absolute;
+  left: 0;
+  width: 1rem;
+  text-align: right;
+  color: #4b5563;
+  /* Gray-500 */
+  user-select: none;
+  font-size: 0.8rem;
+  opacity: 0.5;
+}
+
+.markdown-content pre code .line-content {
+  display: block;
+  white-space: pre-wrap;
+  word-break: break-all;
 }
 
 .markdown-content a {

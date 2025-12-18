@@ -136,7 +136,12 @@ const PostPage = () => {
                     headings.push({
                         level: match[1].length,
                         text: match[2],
-                        id: match[2].toLowerCase().replace(/[^a-z0-9]+/g, '-')
+                        id: match[2].toLowerCase()
+                            .replace(/[^\w\s-]/g, '')
+                            .replace(/[\s]+/g, '-')
+                            .replace(/-+/g, '-')
+                            .replace(/^-+|-+$/g, '')
+
                     });
                 }
 

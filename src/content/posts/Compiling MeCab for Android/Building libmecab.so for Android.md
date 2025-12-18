@@ -67,7 +67,6 @@ wget -O config.guess https://git.savannah.gnu.org/cgit/config.git/plain/config.g
 chmod +x config.sub config.guess
 
 autoreconf -i
-
 ```
 
 Alt-server incase the first ones did not work

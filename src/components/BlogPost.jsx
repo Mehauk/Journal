@@ -108,8 +108,29 @@ const BlogPost = ({ post }) => {
                                     rehypeHighlight
                                 ]}
                                 components={{
+                                    pre: ({ node, inline, className, children, ...props }) => {
+                                        if (children.type == "code") {
+                                            // Split content into lines
+                                            const codeContent = String(children.props.children).replace(/\n$/, '');
+                                            const lines = codeContent.split('\n');
+
+                                            return (
+                                                <pre>
+                                                    <code className={className} {...props}>
+                                                        {lines.map((line, i) => (
+                                                            <span key={i} className="line-wrapper">
+                                                                <span className="line-content">{line || '\n'}</span>
+                                                            </span>
+                                                        ))}
+                                                    </code>
+                                                </pre>
+                                            );
+                                        }
+                                        return (
+                                            <pre>{children}</pre>
+                                        );
+                                    },
                                     a: ({ node, href, children, ...props }) => {
-                                        console.log(href);
                                         // Handle same-page heading links
                                         if (href && href.includes('/post/#')) {
                                             href = href.replace('/post/', '');
