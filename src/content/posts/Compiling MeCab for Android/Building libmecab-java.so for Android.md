@@ -3,7 +3,7 @@ title: Building libmecab-java.so for Android
 date: 2025-11-29
 tags: [shared library, android, native, mecab]
 excerpt: Compiling the libmecab-java.so for use in Android (aarch64-linux-android)
-readTime: 7 min read
+readTime: 8 min read
 ---
 
 This is not the same is `libmecab.so` which is built from the Mecab source. In fact the default name for this file is `libMeCab.so` so it can be a bit confusing.

@@ -3,7 +3,7 @@ title: Building libmecab.so for Android
 date: 2025-11-29
 tags: [shared library, android, native, mecab]
 excerpt: Compiling the libmecab.so for use in Android (aarch64-linux-android)
-readTime: 7 min read
+readTime: 9 min read
 ---
 
 ### The Rundown
@@ -107,7 +107,7 @@ make -j$(nproc)
 ```
 
 ### Files
-Put this in the location you specified for `DICTPATH`. Make sure that `dicdir` points to the location you put the compiled mecab dictionary, which you can find how to do [[Building IPADICT|here.]]
+Put this in the location you specified for `DICTPATH`. Make sure that `dicdir` points to the location you put the compiled mecab dictionary, which you can find how to do [[Building IPADIC|here.]]
 ```
 # mecabrc
 dicdir = /data/user/0/com.example.com/files/ipadic
