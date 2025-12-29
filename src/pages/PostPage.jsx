@@ -66,15 +66,18 @@ const PostPage = () => {
                 for (const path in postModules) {
                     try {
                         // Extract slug from path
-                        const postSlug = path
+                        const title = path
                             .replace('../content/posts/', '')
-                            .replace('.md', '')
+                            .replace('.md', '');
+
+                        const postSlug = title
                             .replaceAll(' ', '-');
 
                         // Build Tree Node
                         const rawPathParts = path.replace('../content/posts/', '').replace('.md', '').split('/');
                         const content = await postModules[path](); // We need content for title
                         const { data } = matter(content);
+                        data.title = title.split("/").pop();
 
                         insertIntoTree(fileTree, rawPathParts, data, postSlug);
 

@@ -1,5 +1,4 @@
 ---
-title: Building IPADIC
 date: 2025-11-29
 tags: [mecab, xml]
 excerpt: Building the IPADIC dictiionary for use in Android

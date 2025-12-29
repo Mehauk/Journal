@@ -1,5 +1,4 @@
 ---
-title: Links and References
 date: 2025-11-29
 tags: [mecab]
 excerpt: Downloads and references for building mecab

@@ -36,17 +36,16 @@ function HomePage() {
   }, []);
 
   const parseMarkdown = (rawContent, path) => {
+    const title = path
+      .replace('./content/posts/', '')
+      .replace('.md', '');
+    const slug = title
+      .replaceAll(' ', '-');
+
     try {
       // Use gray-matter to parse front matter
       const { data, content } = matter(rawContent);
-
-      // Extract slug from path, preserving subdirectory structure
-      // e.g., './content/posts/subdir/file.md' -> 'subdir/file'
-      const slug = path
-        .replace('./content/posts/', '')
-        .replace('.md', '')
-        .replaceAll(' ', '-');
-
+      data.title = title
       return {
         title: data.title || 'Untitled',
         date: data.date || new Date().toISOString().split('T')[0],
@@ -58,12 +57,8 @@ function HomePage() {
       };
     } catch (error) {
       console.error('Error parsing markdown:', error, path);
-      const slug = path
-        .replace('./content/posts/', '')
-        .replace('.md', '')
-        .replaceAll(' ', '-');
       return {
-        title: 'Untitled',
+        title: data.title || 'Untitled',
         date: new Date().toISOString().split('T')[0],
         content: rawContent,
         slug: slug
